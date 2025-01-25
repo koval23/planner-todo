@@ -1,0 +1,65 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.4.1'
+    id 'io.spring.dependency-management' version '1.1.7'
+}
+
+group = 'ru.javabegin.micro.planner'
+version = '0.0.1-SNAPSHOT'
+
+java {
+    toolchain {
+        languageVersion = JavaLanguageVersion.of(17)
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    set('springCloudVersion', "2024.0.0")
+    set('keycloakVersion', "26.0.3")
+}
+
+dependencies {
+//    implementation "org.springframework.boot:spring-boot-starter-data-jpa"
+
+    implementation "org.springframework.boot:spring-boot-starter-web"
+    implementation "org.springframework.cloud:spring-cloud-starter-config"
+    implementation "org.springframework.boot:spring-boot-starter-actuator"
+    implementation "org.springframework.boot:spring-boot-starter-aop"
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.3'
+    implementation 'org.springframework.boot:spring-boot-starter-oauth2-resource-server'
+
+    implementation "org.keycloak:keycloak-admin-client:${keycloakVersion}"
+
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    implementation "org.hibernate:hibernate-core:6.6.4.Final"
+
+    implementation "org.springframework.kafka:spring-kafka"
+
+    implementation 'ru.javabegin.micro.planner:planner-utils'
+
+
+
+
+//    implementation 'org.springframework.cloud:spring-cloud-starter-netflix-eureka-client'
+    implementation ('org.springframework.cloud:spring-cloud-starter-netflix-eureka-client') {
+        exclude group: 'javax.ws.rs', module: 'jsr311-api' // Исключение старой реализации
+    }
+
+//    runtimeOnly "org.postgresql:postgresql"
+
+    implementation "org.projectlombok:lombok:1.18.36"
+    annotationProcessor "org.projectlombok:lombok:1.18.36"
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom "org.springframework.cloud:spring-cloud-dependencies:${springCloudVersion}"
+//        mavenBom "org.keycloak.bom:keycloak-adapter-bom:${keycloakVersion}"
+    }
+}

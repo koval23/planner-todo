@@ -1,0 +1,39 @@
+version: '3.8'
+
+networks:
+  pg-static-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 192.168.1.0/24
+
+services:
+  postgres:
+    image: postgres:latest
+    container_name: postgres-static
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: todo
+    networks:
+      pg-static-network:
+        ipv4_address: 192.168.1.100
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@example.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    networks:
+      pg-static-network:
+        ipv4_address: 192.168.1.101
+    ports:
+      - "5050:80"
+
+volumes:
+  postgres_data:

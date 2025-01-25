@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="CoolRequestEnvironmentPersistentComponent">
+    <option name="environments" value="[{&quot;environmentName&quot;:&quot;ReactiveCompositeDiscoveryClient_PLANNER-TODO&quot;,&quot;hostAddress&quot;:&quot;http:/localhost:8765/planner-todo&quot;,&quot;id&quot;:&quot;8fa0f181bf5be90e7b3aa1c9550ed46d&quot;,&quot;header&quot;:[],&quot;urlParam&quot;:[],&quot;formData&quot;:[],&quot;formUrlencoded&quot;:[]},{&quot;environmentName&quot;:&quot;ReactiveCompositeDiscoveryClient_PLANNER-USERS&quot;,&quot;hostAddress&quot;:&quot;http:/localhost:8765/planner-users&quot;,&quot;id&quot;:&quot;7af56c673192a5418bcbcf636d7298b5&quot;,&quot;header&quot;:[],&quot;urlParam&quot;:[],&quot;formData&quot;:[],&quot;formUrlencoded&quot;:[]},{&quot;environmentName&quot;:&quot;ReactiveCompositeDiscoveryClient_PLANNER-GATEWAY&quot;,&quot;hostAddress&quot;:&quot;http:/localhost:8765/planner-gateway&quot;,&quot;id&quot;:&quot;fe102d7c8c138f30d225b087c1d7c17b&quot;,&quot;header&quot;:[],&quot;urlParam&quot;:[],&quot;formData&quot;:[],&quot;formUrlencoded&quot;:[]}]" />
+  </component>
+</project>
