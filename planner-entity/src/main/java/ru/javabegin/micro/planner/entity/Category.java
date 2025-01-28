@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.io.Serializable;
+import java.util.UUID;
 
 
 /*
@@ -14,7 +15,7 @@ import java.io.Serializable;
 содержит статистику по каждой категории
 
  */
-//@Table(name = "category", schema = "todo", catalog = "planner_todo")
+
 @Entity
 @Setter
 @Getter
@@ -24,9 +25,9 @@ import java.io.Serializable;
 @Table(name = "category")
 public class Category implements Serializable {
 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     private String title;
     // т.к. это поле высчитывается автоматически в триггерах - вручную его не обновляем (updatable = false)

@@ -9,9 +9,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 import ru.javabegin.micro.planner.utils.converter.KCRoleConverter;
 
@@ -44,14 +42,7 @@ public class SpringSecurityConfig {
 
         return http.build();
     }
-
-//    для проверки роли каждый раз и чтоб роли не кешировались
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return new InMemoryUserDetailsManager(); // Не кэширует роли
-    }
-
-
+//    для роботы с opeid если токене нет даных о пользователе
 //    @Bean
 //    @SuppressWarnings("unchecked")
 //    public GrantedAuthoritiesMapper userAuthoritiesMapper() {

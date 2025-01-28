@@ -12,7 +12,7 @@ import java.util.List;
 // Вы можете уже сразу использовать все методы CRUD (Create, Read, Update, Delete)
 // принцип ООП: абстракция-реализация - здесь описываем все доступные способы доступа к данным
 @Repository
-public interface CategoryRepository extends JpaRepository<Category, Long> {
+public interface CategoryRepository extends JpaRepository<Category, String> {
 
     // поиск категорий пользователя (по названию)
     List<Category> findByUserIdOrderByTitleAsc(String id);

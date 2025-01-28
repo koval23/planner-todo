@@ -11,7 +11,7 @@ import java.util.List;
 
 // принцип ООП: абстракция-реализация - здесь описываем все доступные способы доступа к данным
 @Repository
-public interface PriorityRepository extends JpaRepository<Priority, Long> {
+public interface PriorityRepository extends JpaRepository<Priority, String> {
 
     // поиск всех значений данного пользователя
     List<Priority> findByUserIdOrderByIdAsc(String id);

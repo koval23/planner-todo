@@ -1,58 +1,87 @@
 package ru.javabegin.micro.planner.todo.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javabegin.micro.planner.entity.Category;
+import ru.javabegin.micro.planner.todo.dto.category.CategoryRequest;
+import ru.javabegin.micro.planner.todo.dto.category.CategoryResponse;
+import ru.javabegin.micro.planner.todo.handling.CommonException;
+import ru.javabegin.micro.planner.todo.handling.ErrorCode;
+import ru.javabegin.micro.planner.todo.mapper.CategoryMapper;
 import ru.javabegin.micro.planner.todo.repo.CategoryRepository;
 
 import java.util.List;
 
-
-// всегда нужно создавать отдельный класс Service для доступа к данным, даже если кажется,
-// что мало методов или это все можно реализовать сразу в контроллере
-// Такой подход полезен для будущих доработок и правильной архитектуры (особенно, если работаете с транзакциями)
-// все методы класса должны выполниться без ошибки, чтобы транзакция завершилась
-// если в методе выполняются несолько SQL запросов и возникнет исключение - то все выполненные операции откатятся (Rollback)
+@Service
 @Transactional
 @RequiredArgsConstructor
-@Service
-public class  CategoryService {
+public class CategoryService {
 
-    // работает встроенный механизм DI из Spring, который при старте приложения подставит в эту переменную нужные класс-реализацию
-    private final CategoryRepository repository; // сервис имеет право обращаться к репозиторию (БД)
+    private final CategoryMapper categoryMapper;
+    private final CategoryRepository categoryRepository;
 
-//    public CategoryService(CategoryRepository repository) {
-//        this.repository = repository;
-//    }
-
-    public List<Category> findAll(String userId) {
-        return repository.findByUserIdOrderByTitleAsc(userId);
+    public List<CategoryResponse> findAll(String userId) {
+        List<Category> categoryList = categoryRepository.findByUserIdOrderByTitleAsc(userId);
+        return categoryList.stream()
+                .map(categoryMapper::categoryToCategoryResponse)
+                .toList();
     }
 
+    public CategoryResponse add(CategoryRequest categoryRequest, String userId) {
 
-    public Category add(Category category) {
-        return repository.save(category); // метод save обновляет или создает новый объект, если его не было
+        if (userId == null) {
+            throw CommonException.of(ErrorCode.ID_MUST_NOT_BE_NULL, HttpStatus.NOT_FOUND);
+        }
+
+        categoryRequest.setUserId(userId);
+
+        if (categoryRequest.getTitle() == null || categoryRequest.getTitle().trim().isEmpty()) {
+            throw CommonException.of(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST);
+        }
+
+        Category category = categoryRepository.save(categoryMapper.categoryRequestToCategory(categoryRequest));
+
+        return categoryMapper.categoryToCategoryResponse(category);
     }
 
-    public Category update(Category category) {
-        return repository.save(category); // метод save обновляет или создает новый объект, если его не было
+    public CategoryResponse update(String id, String updateTitle) {
+
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CommonException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST));
+        if (!category.getTitle().equals(updateTitle)) {
+            category.setTitle(updateTitle);
+            categoryRepository.save(category);
+            return categoryMapper.categoryToCategoryResponse(category);
+        }
+
+        return categoryMapper.categoryToCategoryResponse(category);
     }
 
-    public void deleteById(Long id) {
-        repository.deleteById(id);
+    public void deleteById(String id) {
+        if (categoryRepository.existsById(id)){
+            categoryRepository.deleteById(id);
+        }else {
+            throw CommonException.of(ErrorCode.CATEGORY_NOT_FOUND, HttpStatus.NOT_FOUND);
+        }
+
     }
 
     // поиск категорий пользователя по названию
-    public List<Category> findByTitle(String text, String userId) {
-        return repository.findByTitle(text, userId);
+    public List<CategoryResponse> findByTitle(String text, String userId) {
+        List<Category> categoryList = categoryRepository.findByTitle(text, userId);
+
+        return categoryList.stream()
+                .map(categoryMapper::categoryToCategoryResponse)
+                .toList();
     }
 
     // поиск категории по ID
-    public Category findById(Long id) {
-        return repository.findById(id).get(); // т.к. возвращается Optional - можно получить объект методом get()
+    public CategoryResponse findById(String id) {
+        Category category = categoryRepository.findById(id)
+                .orElseThrow(() -> new CommonException(ErrorCode.BAD_REQUEST, HttpStatus.BAD_REQUEST));
+        return categoryMapper.categoryToCategoryResponse(category);
     }
-
-
 
 }

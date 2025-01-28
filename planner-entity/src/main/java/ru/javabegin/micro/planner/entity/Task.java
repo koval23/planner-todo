@@ -6,7 +6,7 @@ import lombok.*;
 
 import java.io.Serializable;
 import java.util.Date;
-//@Table(name = "task", schema = "todo", catalog = "planner_todo")
+import java.util.UUID;
 
 @Entity
 @Setter
@@ -19,9 +19,9 @@ public class Task implements Serializable {
 
     // указываем, что поле заполняется в БД
     // нужно, когда добавляем новый объект и он возвращается уже с новым id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
-    private Long id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private UUID id;
 
     private String title;
 
@@ -41,14 +41,8 @@ public class Task implements Serializable {
     @JoinColumn(name = "category_id", referencedColumnName = "id") // по каким полям связывать (foreign key)
     private Category category;
 
-
     @Column(name = "user_id")
     private String userId;
 
 }
 
-/*
-
-задачи пользователя
-
- */
