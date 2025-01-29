@@ -1,61 +1,81 @@
 package ru.javabegin.micro.planner.todo.service;
 
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javabegin.micro.planner.entity.Task;
+import ru.javabegin.micro.planner.todo.dto.task.TaskCreated;
+import ru.javabegin.micro.planner.todo.dto.task.TaskResponse;
+import ru.javabegin.micro.planner.todo.handling.CommonException;
+import ru.javabegin.micro.planner.todo.handling.ErrorCode;
+import ru.javabegin.micro.planner.todo.mapper.TaskMapper;
 import ru.javabegin.micro.planner.todo.repo.TaskRepository;
 
-import java.util.Date;
 import java.util.List;
 
-// всегда нужно создавать отдельный класс Service для доступа к данным, даже если кажется,
-// что мало методов или это все можно реализовать сразу в контроллере
-// Такой подход полезен для будущих доработок и правильной архитектуры (особенно, если работаете с транзакциями)
 @Service
-
-// все методы класса должны выполниться без ошибки, чтобы транзакция завершилась
-// если в методе возникнет исключение - все выполненные операции откатятся (Rollback)
 @Transactional
+@RequiredArgsConstructor
 public class TaskService {
 
-    private final TaskRepository repository; // сервис имеет право обращаться к репозиторию (БД)
+    private final TaskMapper taskMapper;
+    private final TaskRepository taskRepository;
+    private final PriorityService priorityService;
+    private final CategoryService categoryService;
 
-    public TaskService(TaskRepository repository) {
-        this.repository = repository;
+    public TaskResponse add(TaskCreated taskCreated, String userId) {
+
+        Task newTask = taskMapper.toEntity(taskCreated, userId);
+        taskRepository.save(newTask);
+
+        return taskMapper.toResponse(newTask);
+    }
+
+    public void deleteById(String id) {
+        taskRepository.deleteById(id);
     }
 
     public List<Task> findAll(String userId) {
-        return repository.findByUserIdOrderByTitleAsc(userId);
+        return taskRepository.findByUserIdOrderByTitleAsc(userId);
     }
 
-    public Task add(Task task) {
-        return repository.save(task); // метод save обновляет или создает новый объект, если его не было
+    public TaskResponse findById(String id) {
+        Task task = taskRepository.findById(id).orElseThrow(
+                ()-> CommonException.of(ErrorCode.INVALID_ID, HttpStatus.NOT_FOUND)
+        );
+        return taskMapper.toResponse(task);
     }
 
-    public Task update(Task task) {
-        return repository.save(task); // метод save обновляет или создает новый объект, если его не было
-    }
-
-    public void deleteById(Long id) {
-        repository.deleteById(id);
-    }
-
-    public Page<Task> findByParams(String text,
-                                   Boolean completed,
-                                   Long priorityId,
-                                   Long categoryId,
-                                   String userId,
-                                   Date dateFrom,
-                                   Date dateTo,
-                                   PageRequest paging) {
-        return repository.findByParams(text, completed, priorityId, categoryId, userId, dateFrom, dateTo, paging);
-    }
-
-    public Task findById(Long id) {
-        return repository.findById(id).get(); // т.к. возвращается Optional - можно получить объект методом get()
-    }
-
+//    public TaskResponse update(TaskUpdate taskUpdate) {
+//
+//        Task task = taskRepository.findById(taskUpdate.getId()).orElseThrow(
+//                ()-> CommonException.of(ErrorCode.INVALID_ID, HttpStatus.NOT_FOUND)
+//        );
+//        if(!task.getPriority().getId().toString().equals(taskUpdate.getPriorityId())){
+//            task.setPriority( priorityService.priorityExists(taskUpdate.getPriorityId()));
+//        };
+//
+//        if(!task.getCategory().getId().toString().equals(taskUpdate.getCategoryId())){
+//            task.setCategory(categoryService.findById(taskUpdate.getCategoryId()));
+//        };
+//
+//        task.setTaskDate(taskUpdate.getTaskDate());
+//        task.setTitle(taskUpdate.getTitle());
+//        taskRepository.save(task);
+//
+//        return taskMapper.toResponse(task);
+//    }
+//
+//    public Page<Task> findByParams(String text,
+//                                   Boolean completed,
+//                                   Long priorityId,
+//                                   Long categoryId,
+//                                   String userId,
+//                                   Date dateFrom,
+//                                   Date dateTo,
+//                                   PageRequest paging) {
+//        return taskRepository.findByParams(text, completed, priorityId, categoryId, userId, dateFrom, dateTo, paging);
+//    }
 
 }

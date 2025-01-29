@@ -13,7 +13,7 @@ import java.util.List;
 
 // принцип ООП: абстракция-реализация - здесь описываем все доступные способы доступа к данным
 @Repository
-public interface TaskRepository extends JpaRepository<Task, Long> {
+public interface TaskRepository extends JpaRepository<Task, String> {
 
     @Query("SELECT t FROM Task t where " +
             "(:title is null or :title='' or lower(t.title) like lower(concat('%', :title,'%'))) and" +

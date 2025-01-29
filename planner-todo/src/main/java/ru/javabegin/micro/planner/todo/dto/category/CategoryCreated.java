@@ -9,14 +9,8 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryRequest {
+public class CategoryCreated {
 
     private String title;
-
-    private Long completedCount;
-
-    private Long uncompletedCount;
-
-    private String userId;
 
 }

@@ -1,19 +1,16 @@
 ﻿package ru.javabegin.micro.planner.todo.dto.priority;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Setter
 @Getter
+@EqualsAndHashCode
 @NoArgsConstructor
 @AllArgsConstructor
-public class PriorityDTO {
-
-    private String id;
+public class PriorityCreated {
 
     private String title;
 
     private String color;
+
 }

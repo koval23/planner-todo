@@ -1,19 +1,26 @@
-﻿package ru.javabegin.micro.planner.todo.dto.priority;
+﻿package ru.javabegin.micro.planner.todo.dto.task;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.Date;
+
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-public class PriorityDTO {
+public class TaskUpdate {
 
     private String id;
 
     private String title;
 
-    private String color;
+    private Date taskDate;
+
+    private String priorityId;
+
+    private String categoryId;
+
 }

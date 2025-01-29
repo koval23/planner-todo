@@ -9,12 +9,10 @@ import lombok.Setter;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CategoryResponse {
+public class CategoryDTO {
+
+    private String id;
 
     private String title;
-
-    private Long completedCount;
-
-    private Long uncompletedCount;
 
 }

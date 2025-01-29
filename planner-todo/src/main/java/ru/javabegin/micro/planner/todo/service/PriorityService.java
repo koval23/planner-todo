@@ -1,10 +1,12 @@
 package ru.javabegin.micro.planner.todo.service;
 
 import lombok.RequiredArgsConstructor;
+import org.mapstruct.Named;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javabegin.micro.planner.entity.Priority;
+import ru.javabegin.micro.planner.todo.dto.priority.PriorityCreated;
 import ru.javabegin.micro.planner.todo.dto.priority.PriorityDTO;
 import ru.javabegin.micro.planner.todo.handling.CommonException;
 import ru.javabegin.micro.planner.todo.handling.ErrorCode;
@@ -21,50 +23,65 @@ public class PriorityService {
     private final PriorityMapper priorityMapper;
     private final PriorityRepository priorityRepository;
 
-    public List<Priority> findAll(String userId) {
-        return priorityRepository.findByUserIdOrderByIdAsc(userId);
-    }
+    public PriorityDTO add(PriorityCreated priorityCreated, String userId) {
 
-    public PriorityDTO add(PriorityDTO priorityDTO, String userId) {
-
-        if (priorityDTO.getColor().isBlank()) {
-            priorityDTO.setColor("white");
+        if (priorityCreated.getColor().isBlank()) {
+            priorityCreated.setColor("white");
         }
-        priorityDTO.setUserId(userId);
 
-        Priority priority = priorityRepository.save(priorityMapper.priorityDTOToPriority(priorityDTO));
+        Priority priority = priorityRepository.save(priorityMapper.toEntity(priorityCreated, userId));
 
-        return priorityMapper.priorityToPriorityDTO(priority);
-    }
-
-    public PriorityDTO update(PriorityDTO priorityDTO) {
-
-        Priority priority = findById(priorityDTO.getId());
-
-        if (priorityDTO.getTitle().equals(priority.getTitle())) {
-            priority.setTitle(priorityDTO.getTitle());
-        }
-        if (priorityDTO.getColor().equals(priority.getColor())) {
-            priority.setColor(priorityDTO.getColor());
-        }
-        priorityRepository.save(priority);
-
-        return priorityMapper.priorityToPriorityDTO(priority);
+        return priorityMapper.toDTO(priority);
     }
 
     public void deleteById(String id) {
-        findById(id);
+        priorityExists(id);
         priorityRepository.deleteById(id);
     }
 
-    public Priority findById(String id) {
+    public List<PriorityDTO> findAllPriorityByUser(String userId) {
+        return priorityRepository.findByUserIdOrderByIdAsc(userId).stream()
+                .map(priorityMapper::toDTO)
+                .toList();
+    }
+
+    public List<PriorityDTO> findAll() {
+        return priorityRepository.findAll().stream()
+                .map(priorityMapper::toDTO)
+                .toList();
+    }
+
+    public PriorityDTO findById(String id) {
+        return priorityMapper.toDTO(priorityExists(id));
+    }
+
+    @Named("mapPriority")
+    public Priority priorityExists(String id) {
         return priorityRepository.findById(id).orElseThrow(
                 () -> CommonException.of(ErrorCode.PRIORITY_NOT_FOUND, HttpStatus.NOT_FOUND)
         );
     }
 
-    public List<Priority> find(String title, String userId) {
-        return priorityRepository.findByTitle(title, userId);
-    }
+
+//    public PriorityDTO update(PriorityDTO priorityDTO) {
+//
+//        Priority priority = priorityExists(priorityDTO.getId());
+//
+//        if (priorityDTO.getTitle().equals(priority.getTitle())) {
+//            priority.setTitle(priorityDTO.getTitle());
+//        }
+//        if (priorityDTO.getColor().equals(priority.getColor())) {
+//            priority.setColor(priorityDTO.getColor());
+//        }
+//        priorityRepository.save(priority);
+//
+//        return priorityMapper.toDTO(priority);
+//    }
+
+//    public List<PriorityDTO> find(String title, String userId) {
+//        return priorityRepository.findByTitle(title, userId).stream()
+//                .map(priorityMapper::toDTO)
+//                .toList();
+//    }
 
 }
