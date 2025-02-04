@@ -38,6 +38,8 @@ public class AdminService {
 
 //        отправка сообщения о создании нового пользователя
         kafkaTemplate.send(TOPIC_NAME, userId);
+
+        userDTO.setId(userId);
         return userDTO;
     }
 

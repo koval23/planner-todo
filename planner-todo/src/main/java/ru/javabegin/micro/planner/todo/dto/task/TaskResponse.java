@@ -1,4 +1,4 @@
-﻿package ru.javabegin.micro.planner.todo.dto.task;
+package ru.javabegin.micro.planner.todo.dto.task;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

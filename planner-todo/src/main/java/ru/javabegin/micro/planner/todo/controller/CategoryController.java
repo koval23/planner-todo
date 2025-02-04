@@ -27,9 +27,13 @@ public class CategoryController {
 
     }
 
+    //    @PostMapping("/all")
+//    public List<CategoryDTO> findAll(@AuthenticationPrincipal Jwt jwt) {
+//        return categoryService.findAll(jwt.getId());
+//    }
     @PostMapping("/all")
-    public List<CategoryDTO> findAll(@AuthenticationPrincipal Jwt jwt) {
-        return categoryService.findAll(jwt.getId());
+    public List<CategoryDTO> findAll(@RequestParam String userid) {
+        return categoryService.findAll(userid);
     }
 
     @DeleteMapping("/delete/{id}")

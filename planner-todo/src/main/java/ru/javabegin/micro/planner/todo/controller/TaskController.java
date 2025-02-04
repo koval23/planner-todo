@@ -10,10 +10,8 @@ import ru.javabegin.micro.planner.entity.Task;
 import ru.javabegin.micro.planner.todo.dto.task.TaskCreated;
 import ru.javabegin.micro.planner.todo.dto.task.TaskResponse;
 import ru.javabegin.micro.planner.todo.service.TaskService;
-import ru.javabegin.micro.planner.utils.rest.resttemplate.UserRestBuilder;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,12 +21,12 @@ public class TaskController {
     private final TaskService taskService;
 
     // микросервисы для работы с пользователями
-    private UserRestBuilder userRestBuilder;
+//    private UserRestBuilder userRestBuilder;
 
     @PostMapping("/add")
     public ResponseEntity<TaskResponse> add(@RequestBody TaskCreated taskCreated,
                                             @AuthenticationPrincipal Jwt jwt) {
-        return new ResponseEntity(taskService.add(taskCreated, jwt.getId()), HttpStatus.NOT_ACCEPTABLE);
+        return new ResponseEntity<>(taskService.add(taskCreated, jwt.getId()), HttpStatus.NOT_ACCEPTABLE);
 
     }
 

@@ -19,7 +19,6 @@ import org.springframework.stereotype.Service;
 import ru.javabegin.micro.planner.users.dto.UserDTO;
 import ru.javabegin.micro.planner.users.exception.handling.CommonException;
 import ru.javabegin.micro.planner.users.exception.handling.ErrorCode;
-import ru.javabegin.micro.planner.utils.rest.webclient.UserWebClientBuilder;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -43,7 +42,7 @@ public class KeycloakUtils {
     private String clientSecret;
     private final static String keycloakUrl = "http://localhost:8080";
 
-    private final UserWebClientBuilder webClientBuilder;
+//    private final UserWebClientBuilder webClientBuilder;
 
     private static Keycloak keycloak; // Ссылка на единственный экземпляр Keycloak
     private static RealmResource realmResource;// доступ к API realm

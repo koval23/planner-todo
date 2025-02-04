@@ -24,7 +24,7 @@ public class Task implements Serializable {
     private String title;
 
     @Column(name = "is_active")
-    private Boolean completed = true;
+    private Boolean completed = false;
 
     @Column(name = "task_date")
     private Date taskDate;

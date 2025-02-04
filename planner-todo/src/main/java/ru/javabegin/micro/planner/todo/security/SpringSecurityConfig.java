@@ -23,8 +23,8 @@ public class SpringSecurityConfig {
         // все сетевые настройки
         http.authorizeHttpRequests(auth -> auth
 //                        .requestMatchers("/test/login").permitAll() // анонимный доступ
-                        .requestMatchers("/category/**","/priority/**","/task/**").hasRole("user")  // Доступ только для роли USER
-                        .anyRequest().authenticated() // остальной API доступен только аутентифицированным пользователям
+                                .requestMatchers("/category/**", "/priority/**", "/task/**").hasRole("user")  // Доступ только для роли USER
+                                .anyRequest().authenticated() // остальной API доступен только аутентифицированным пользователям
                 )
                 .oauth2ResourceServer(oauth2 -> oauth2
                         .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtAuthenticationConverter)) // Добавляем конвертер

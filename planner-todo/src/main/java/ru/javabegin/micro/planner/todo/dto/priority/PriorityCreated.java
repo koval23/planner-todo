@@ -1,4 +1,4 @@
-﻿package ru.javabegin.micro.planner.todo.dto.priority;
+package ru.javabegin.micro.planner.todo.dto.priority;
 
 import lombok.*;
 
