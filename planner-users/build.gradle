@@ -55,6 +55,10 @@ dependencies {
     implementation "org.projectlombok:lombok:1.18.36"
     annotationProcessor "org.projectlombok:lombok:1.18.36"
 
+    //    mapstruckt
+    implementation 'org.mapstruct:mapstruct:1.6.3'
+    annotationProcessor  'org.mapstruct:mapstruct-processor:1.6.3'
+
 }
 
 dependencyManagement {

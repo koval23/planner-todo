@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import ru.javabegin.micro.planner.users.dto.UserDTO;
+import ru.javabegin.micro.planner.users.dto.UserRegister;
 import ru.javabegin.micro.planner.users.exception.handling.CommonException;
 import ru.javabegin.micro.planner.users.exception.handling.ErrorCode;
 
@@ -72,16 +73,16 @@ public class KeycloakUtils {
     }
 
 
-    public Response createKeycloakUser(UserDTO user) {
+    public Response createKeycloakUser(UserRegister userRegister) {
         keycloakTokenManager.ensureValidAccessToken(keycloak);
         realmResource.users();
         // Создаем объект учетных данных для пароля
-        CredentialRepresentation credentialRepresentation = createPasswordCredentials(user.getPassword());
+        CredentialRepresentation credentialRepresentation = createPasswordCredentials(userRegister.getPassword());
 
         UserRepresentation kcUser = new UserRepresentation();
-        kcUser.setUsername(user.getUsername());
+        kcUser.setUsername(userRegister.getUsername());
         kcUser.setCredentials(Collections.singletonList(credentialRepresentation));
-        kcUser.setEmail(user.getEmail());
+        kcUser.setEmail(userRegister.getEmail());
         kcUser.setEnabled(true);
         kcUser.setEmailVerified(false);
 

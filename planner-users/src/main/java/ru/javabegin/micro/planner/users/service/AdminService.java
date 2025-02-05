@@ -8,6 +8,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 import ru.javabegin.micro.planner.users.dto.UserDTO;
+import ru.javabegin.micro.planner.users.dto.UserRegister;
 import ru.javabegin.micro.planner.users.exception.handling.CommonException;
 import ru.javabegin.micro.planner.users.exception.handling.ErrorCode;
 import ru.javabegin.micro.planner.users.keycloak.KeycloakUtils;
@@ -23,14 +24,14 @@ public class AdminService {
     private final KeycloakUtils keycloakUtils;
     private final KafkaTemplate<String, String> kafkaTemplate;
 
-    public UserDTO addUser(UserDTO userDTO) {
+    public void addUser(UserRegister userRegister) {
 
-        validUserDTORequestData(userDTO);
+//        validUserDTORequestData(userDTO);
 
-        Response createdResponse = keycloakUtils.createKeycloakUser(userDTO);
+        Response createdResponse = keycloakUtils.createKeycloakUser(userRegister);
 
         if (createdResponse.getStatus() == HttpStatus.CONFLICT.value()) {
-            throw CommonException.of(ErrorCode.EMAIL_ALREADY_EXISTS, HttpStatus.CONFLICT, List.of(userDTO.getEmail()));
+            throw CommonException.of(ErrorCode.EMAIL_ALREADY_EXISTS, HttpStatus.CONFLICT, List.of(userRegister.getEmail()));
         }
 
         String userId = CreatedResponseUtil.getCreatedId(createdResponse);
@@ -38,9 +39,6 @@ public class AdminService {
 
 //        отправка сообщения о создании нового пользователя
         kafkaTemplate.send(TOPIC_NAME, userId);
-
-        userDTO.setId(userId);
-        return userDTO;
     }
 
     public void updateUser(UserDTO userDTO) {

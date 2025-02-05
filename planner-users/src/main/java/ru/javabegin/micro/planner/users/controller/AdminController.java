@@ -4,9 +4,11 @@ import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
 import lombok.RequiredArgsConstructor;
 import org.keycloak.representations.idm.UserRepresentation;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.javabegin.micro.planner.users.dto.UserDTO;
+import ru.javabegin.micro.planner.users.dto.UserRegister;
 import ru.javabegin.micro.planner.users.service.AdminService;
 
 import java.util.List;
@@ -34,11 +36,12 @@ public class AdminController {
     private final AdminService adminService;
 
     @PostMapping("/add")
-    public ResponseEntity<UserDTO> add(@RequestBody UserDTO userDTO) {
-        return ResponseEntity.ok(adminService.addUser(userDTO));
+    public ResponseEntity<Void> add(@RequestBody UserRegister userRegister) {
+        adminService.addUser(userRegister);
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
-//    todo Передать id и обект для изменения
+    //    todo Передать id и обект для изменения
     @PostMapping("/update")
     public ResponseEntity<Void> update(@Valid @RequestBody UserDTO userDTO) {
         adminService.updateUser(userDTO);
