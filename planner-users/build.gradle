@@ -42,6 +42,10 @@ dependencies {
 
     implementation 'ru.javabegin.micro.planner:planner-utils'
 
+    implementation 'org.springframework.boot:spring-boot-starter-webflux'
+
+
+
 
 
 

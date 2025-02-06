@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AmplicodePersistenceUnitSettings">
+    <persistence-units>
+      <persistence-unit moduleName="planner-entity.main" name="Default">
+        <packages>
+          <package value="ru.javabegin.micro.planner" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit moduleName="planner-todo.main" name="Default">
+        <packages>
+          <package value="ru.javabegin.micro.planner.todo" />
+        </packages>
+      </persistence-unit>
+      <persistence-unit moduleName="planner-users.main" name="Default">
+        <packages>
+          <package value="ru.javabegin.micro.planner.users" />
+        </packages>
+      </persistence-unit>
+    </persistence-units>
+  </component>
+</project>
